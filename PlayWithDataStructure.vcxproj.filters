@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="第3章线性表\01线性表顺序存储_List.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第3章线性表\02线性表链式存储_LinkList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第3章线性表\03静态链表_StaticLinkList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第4章栈与队列\01顺序栈_Stack.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第4章栈与队列\02两栈共享空间_DoubleStack.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第4章栈与队列\03链栈_LinkStack.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第4章栈与队列\04斐波那契函数_Fibonacci.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第4章栈与队列\05顺序队列_Queue.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第4章栈与队列\06链队列_LinkQueue.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第5章串\01串_String.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第5章串\02模式匹配_KMP.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第6章树\01二叉树顺序结构实现_BiTreeArray.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第6章树\02二叉树链式结构实现_BiTreeLink.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第6章树\03线索二叉树_ThreadBinaryTree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第7章图\01邻接矩阵创建_CreateMGraph.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第7章图\02邻接表创建_CreateALGraph.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第7章图\03邻接矩阵深度和广度遍历DFS_BFS.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第7章图\04邻接表深度和广度遍历DFS_BFS.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第7章图\05最小生成树_Prim.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第7章图\06最小生成树_Kruskal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第7章图\07最短路径_Dijkstra.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第7章图\08最短路径_Floyd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第7章图\09拓扑排序_TopologicalSort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第7章图\10关键路径_CriticalPath.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第8章查找\01静态查找_Search.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第8章查找\02二叉排序树_BinarySortTree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第8章查找\03平衡二叉树_AVLTree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第8章查找\04B树_BTree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第8章查找\05散列表_HashTable.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第9章排序\01排序_Sort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="第8章查找\AVLTree_test.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
