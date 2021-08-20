@@ -36,6 +36,7 @@ void rotateRight(AVLTree *t) {
 
 void balanceLeft(AVLTree *t) {
     AVLTree l = (*t)->left;
+    AVLTree lr;
     switch (l->bf) {
      // LL型
     case LH:
@@ -43,13 +44,34 @@ void balanceLeft(AVLTree *t) {
         l->bf = EH;
         rotateRight(t);
         break;
+
     // LR型
     case RH:
-        (*t)->bf = EH;
-        l->bf = EH;
-        rotateLeft(&l);
+        lr = l->right;
+        switch (lr->bf)
+        {
+        case LH:
+            (*t)->bf = RH;
+            l->bf = RH;
+            break;
+        case EH:
+            (*t)->bf = EH;
+            l->bf = EH;
+            break;
+        case RH:
+            (*t)->bf = EH;
+            l->bf = LH;
+            break;
+        default:
+            break;
+        }
+
+        lr->bf = EH;
+
+        rotateLeft(&(*t)->left);
         rotateRight(t);
         break;
+
     default:
         break;
     }
@@ -65,6 +87,7 @@ void balanceRight(AVLTree *t) {
         r->bf = EH;
         rotateLeft(t);
         break;
+
     // RL型
     case LH:
         rl = r->left;
@@ -88,6 +111,7 @@ void balanceRight(AVLTree *t) {
 
         rotateRight(&(*t)->right);
         rotateLeft(t);
+
     default:
         break;
     }
@@ -105,6 +129,7 @@ int insertAVLTree(AVLTree *t, int data, int *isTaller) {
     }
 
     if (data == (*t)->data) {
+        *isTaller = 0;
         return 1;
     }
     else if(data < (*t)->data) {
@@ -114,13 +139,16 @@ int insertAVLTree(AVLTree *t, int data, int *isTaller) {
             // 原本右子树高，插入左节点后左右子树一样高
             case RH:
                 (*t)->bf = EH;
+                *isTaller = 1;
                 break;
             // 原本左右子树一样高，插入左节点后左子树高一层
             case EH:
                 (*t)->bf = LH;
+                (*isTaller) = 0;
                 break;
             // 原本左子树高，插入左节点后需要重新平衡
             case LH:
+                printf("balanceLeft\n");
                 balanceLeft(t);
                 *isTaller = 0;
                 break;
@@ -135,16 +163,19 @@ int insertAVLTree(AVLTree *t, int data, int *isTaller) {
             switch ((*t)->bf) {
                 // 原本右子树高，插入右节点后需要重新平衡
             case RH:
+                printf("balanceRight\n");
                 balanceRight(t);
                 *isTaller = 0;
                 break;
                 // 原本左右子树一样高，插入右节点后右子树高一层
             case EH:
                 (*t)->bf = RH;
+                *isTaller = 1;
                 break;
                 // 原本左子树高，插入右节点后左右子树一样高
             case LH:
                 (*t)->bf = EH;
+                *isTaller = 0;
                 break;
             default:
                 break;
@@ -165,7 +196,8 @@ void traversal(AVLTree t) {
 
 int main() {
     //int a[] = { 3,2,1,4,5,6,7,10,9,8 };
-    int a[] = { 3,2,1,4,5,6,8,10,9,7 };
+    //int a[] = { 3,2,1,4,5,6,8,10,9,7 };
+    int a[] = { 13,42,61,74,15,6,58,160,19,7 };
     int isTaller = 0;
     AVLTree t = NULL;
     for (int i = 0; i < NodeNum; ++i) {
