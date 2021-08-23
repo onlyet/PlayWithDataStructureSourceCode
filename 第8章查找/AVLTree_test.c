@@ -3,11 +3,6 @@
 
 #define NodeNum 10
 
-//enum BalanceFactor {
-//    RH = -1,
-//    EH = 0,
-//    LH = 1
-//};
 #define RH -1
 #define EH 0
 #define LH 1
@@ -50,23 +45,23 @@ void balanceLeft(AVLTree *t) {
         lr = l->right;
         switch (lr->bf)
         {
-        case LH:
-            (*t)->bf = RH;
-            l->bf = RH;
+        case LH:            // 插入节点是lr的左孩子
+            (*t)->bf = RH;  // *t右旋失去左孩子，故(*t)->bf变为-1
+            l->bf = EH;     // l左旋先失去右孩子，而lr的左孩子（插入节点）又变成l的右孩子，故l->bf仍是0
             break;
-        case EH:
-            (*t)->bf = EH;
-            l->bf = EH;
+        case EH:            // 插入节点是lr
+            (*t)->bf = EH;  // *t和r变为叶子节点，故bf都是0
+            l->bf = EH; 
             break;
-        case RH:
-            (*t)->bf = EH;
-            l->bf = LH;
+        case RH:            // 插入节点是lr的右孩子
+            (*t)->bf = EH;  // *t右旋先失去左孩子，而lr的右孩子（插入节点）又变成*t的左孩子，故(*t)->仍是0
+            l->bf = LH;     // l左旋失去右孩子，故l->bf是1
             break;
         default:
             break;
         }
 
-        lr->bf = EH;
+        lr->bf = EH;        // rl上升1层或2层，bf肯定是0
 
         rotateLeft(&(*t)->left);
         rotateRight(t);
@@ -93,16 +88,16 @@ void balanceRight(AVLTree *t) {
         rl = r->left;
         switch (rl->bf) {
         case RH:
-            r->bf = EH;     // rl的右孩子变成r的左孩子，故r的bf变为0
             (*t)->bf = LH;  // (*t)一定有左孩子，左旋后右孩子没了，所以bf是1
+            r->bf = EH;     // rl的右孩子变成r的左孩子，故r的bf变为0
             break;
         case EH:
-            r->bf = EH;     // *t和r变为叶子节点，故bf都是0
             (*t)->bf = EH;
+            r->bf = EH;     // *t和r变为叶子节点，故bf都是0
             break;
         case LH:
-            r->bf = RH;     // 右旋，r失去左孩子，故r->bf变为-1
             (*t)->bf = EH;  // (*t)一定有左孩子，rl上升两层，rl的左孩子变为(*t)的右孩子，故(*t)->bf是0
+            r->bf = RH;     // 右旋，r失去左孩子，故r->bf变为-1
             break;
         default:
             break;
@@ -139,12 +134,12 @@ int insertAVLTree(AVLTree *t, int data, int *isTaller) {
             // 原本右子树高，插入左节点后左右子树一样高
             case RH:
                 (*t)->bf = EH;
-                *isTaller = 1;
+                *isTaller = 0;
                 break;
             // 原本左右子树一样高，插入左节点后左子树高一层
             case EH:
                 (*t)->bf = LH;
-                (*isTaller) = 0;
+                (*isTaller) = 1;
                 break;
             // 原本左子树高，插入左节点后需要重新平衡
             case LH:
