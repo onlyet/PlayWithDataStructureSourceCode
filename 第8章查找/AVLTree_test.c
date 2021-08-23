@@ -180,6 +180,33 @@ int insertAVLTree(AVLTree *t, int data, int *isTaller) {
     return 1;
 }
 
+void updateBf(AVLTree *t, int *isShorter, AVLTree *pre) {
+    if (NULL != (*t)->right) {
+        updateBf(&(*t)->right, isShorter, pre);
+
+        if (*isShorter) {
+            switch ((*t)->bf) {
+            case EH:
+                (*t)->bf = LH;
+                *isShorter = 0;
+                break;
+            case RH:
+                (*t)->bf = EH;
+                *isShorter = 1;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    else {
+        *pre = *t;
+        // 前驱的左孩子
+        (*t) = (*t)->left;
+        *isShorter = 0;
+    }
+}
+
 void deleteAVLTree(AVLTree *t, int data, int *isShorter) {
     if (NULL == t || NULL == *t) {
         return;
@@ -268,25 +295,29 @@ void deleteAVLTree(AVLTree *t, int data, int *isShorter) {
             (*t)->right = NULL;
         }
         else {
-            AVLTree *d = &(*t)->left;
-            while (NULL != (*d)->right) {
-                d = &(*d)->right;
+            //AVLTree *l = &(*t)->left;
+            // 前驱
+            AVLTree pre = NULL;
+            updateBf(&(*t)->left, isShorter, &pre);
+
+            (*t)->data = pre->data;
+            free(pre);
+
+            switch ((*t)->bf)
+            {
+            case RH:
+                balanceRight(t);
+
+                if (EH == (*t)->bf) {
+                    // 平衡后高度-1
+                    *isShorter = 0;
+                }
+                else {
+                    *isShorter = 1;
+                }
+            default:
+                break;
             }
-
-            AVLTree l = (*d)->left;
-            int tmpData = (*d)->data;
-
-            // 这里删除前驱后不知道怎么更新上层节点的平衡因子，故用deleteAVLTree
-            *isShorter = 0;
-            deleteAVLTree(t, tmpData, isShorter);
-            *isShorter = 1;
-
-            (*t)->data = tmpData;
-            //free(*d);
-            //*d = l;
-            //if (NULL != *d) {
-            //    (*d)->bf = 0;
-            //}
         }
     }
 }
@@ -315,6 +346,7 @@ int main() {
     
     int isShorter = 0;
     deleteAVLTree(&t, 42, &isShorter);
+    deleteAVLTree(&t, 61, &isShorter);
     traversal(t);
 
     return 0;
