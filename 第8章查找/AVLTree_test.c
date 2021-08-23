@@ -180,6 +180,117 @@ int insertAVLTree(AVLTree *t, int data, int *isTaller) {
     return 1;
 }
 
+void deleteAVLTree(AVLTree *t, int data, int *isShorter) {
+    if (NULL == t || NULL == *t) {
+        return;
+    }
+    if (data < (*t)->data) {
+        deleteAVLTree(&(*t)->left, data, isShorter);
+
+        if (*isShorter) {
+            switch ((*t)->bf)
+            {
+            case LH:
+                (*t)->bf = EH;
+                *isShorter = 1;
+                break;
+            case EH:
+                (*t)->bf = RH;
+                *isShorter = 0;
+                break;
+            case RH:
+                balanceRight(t);
+
+                if (EH == (*t)->left->bf) {
+                    // 平衡后高度-1
+                    *isShorter = 0;
+                }
+                else {
+                    // l有右孩子
+                    *isShorter = 1;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    else if (data > (*t)->data) {
+        deleteAVLTree(&(*t)->right, data, isShorter);
+
+        if (*isShorter) {
+            switch ((*t)->bf)
+            {
+            case LH:
+
+                balanceLeft(t);
+
+                if (EH == (*t)->right->bf) {
+                    *isShorter = 0;
+                }
+                else {
+                    // r有左孩子
+                    *isShorter = 1;
+                }
+
+                *isShorter = 1;
+                break;
+            case EH:
+                (*t)->bf = LH;
+                *isShorter = 0;
+                break;
+            case RH:
+                (*t)->bf = EH;
+                *isShorter = 1;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    else {
+        *isShorter = 1;
+
+        if (NULL == (*t)->left && NULL == (*t)->right) {
+            free(*t);
+            *t = NULL;
+        }
+        else if (NULL != (*t)->left && NULL == (*t)->right) {
+            (*t)->data = (*t)->left->data;
+            (*t)->bf = 0;
+            free((*t)->left);
+            (*t)->left = NULL;
+        }
+        else if (NULL == (*t)->left && NULL != (*t)->right) {
+            (*t)->data = (*t)->right->data;
+            (*t)->bf = 0;
+            free((*t)->right);
+            (*t)->right = NULL;
+        }
+        else {
+            AVLTree *d = &(*t)->left;
+            while (NULL != (*d)->right) {
+                d = &(*d)->right;
+            }
+
+            AVLTree l = (*d)->left;
+            int tmpData = (*d)->data;
+
+            // 这里删除前驱后不知道怎么更新上层节点的平衡因子，故用deleteAVLTree
+            *isShorter = 0;
+            deleteAVLTree(t, tmpData, isShorter);
+            *isShorter = 1;
+
+            (*t)->data = tmpData;
+            //free(*d);
+            //*d = l;
+            //if (NULL != *d) {
+            //    (*d)->bf = 0;
+            //}
+        }
+    }
+}
+
 void traversal(AVLTree t) {
     if (NULL == t) {
         return;
@@ -192,13 +303,19 @@ void traversal(AVLTree t) {
 int main() {
     //int a[] = { 3,2,1,4,5,6,7,10,9,8 };
     //int a[] = { 3,2,1,4,5,6,8,10,9,7 };
-    int a[] = { 13,42,61,74,15,6,58,160,19,7 };
+    int a[] = { 13,42,61,75,15,6,58,160,19,7 };
     int isTaller = 0;
     AVLTree t = NULL;
     for (int i = 0; i < NodeNum; ++i) {
         insertAVLTree(&t, a[i], &isTaller);
-        traversal(t);
+        //traversal(t);
     }
-    //traversal(t);
+    traversal(t);
+    printf("\n\n");
+    
+    int isShorter = 0;
+    deleteAVLTree(&t, 42, &isShorter);
+    traversal(t);
+
     return 0;
 }
