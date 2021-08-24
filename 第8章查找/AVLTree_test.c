@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
-#define NodeNum 10
+#define NodeNum 20
 
 #define RH -1
 #define EH 0
@@ -67,11 +67,12 @@ void balanceLeft(AVLTree *t) {
         rotateRight(t);
         break;
 
-    // 删除的时候用到
+    // 删除的时候才用到
     case EH:
-        (*t)->bf = EH;
-        l->bf = EH;
         rotateRight(t);
+        // l->bf==0比l->bf==1时右子树高一层，故平衡后t的bf变为-1
+        // 平衡前的l的bf平衡后不变
+        (*t)->bf = RH;
         break;
 
     default:
@@ -113,6 +114,15 @@ void balanceRight(AVLTree *t) {
 
         rotateRight(&(*t)->right);
         rotateLeft(t);
+        break;
+
+    // 删除的时候才用到
+    case EH:
+        rotateLeft(t);
+        // r->bf==0比r->bf==1时左子树高一层，故平衡后t的bf变为1
+        // r->bf和平衡前一样
+        (*t)->bf = LH;
+        break;
 
     default:
         break;
@@ -143,17 +153,20 @@ int insertAVLTree(AVLTree *t, int data, int *isTaller) {
                 (*t)->bf = EH;
                 *isTaller = 0;
                 break;
+
             // 原本左右子树一样高，插入左节点后左子树高一层
             case EH:
                 (*t)->bf = LH;
                 (*isTaller) = 1;
                 break;
+
             // 原本左子树高，插入左节点后需要重新平衡
             case LH:
                 //printf("balanceLeft\n");
                 balanceLeft(t);
                 *isTaller = 0;
                 break;
+
             default:
                 break;
             }
@@ -169,16 +182,19 @@ int insertAVLTree(AVLTree *t, int data, int *isTaller) {
                 balanceRight(t);
                 *isTaller = 0;
                 break;
+
                 // 原本左右子树一样高，插入右节点后右子树高一层
             case EH:
                 (*t)->bf = RH;
                 *isTaller = 1;
                 break;
+
                 // 原本左子树高，插入右节点后左右子树一样高
             case LH:
                 (*t)->bf = EH;
                 *isTaller = 0;
                 break;
+
             default:
                 break;
             }
@@ -191,16 +207,30 @@ void updateBf(AVLTree *t, int *isShorter, AVLTree *pre) {
     if (NULL != (*t)->right) {
         updateBf(&(*t)->right, isShorter, pre);
 
+        int bug = 1;
         if (*isShorter) {
             switch ((*t)->bf) {
+            case LH:
+                bug = 1;
+                balanceLeft(t);
+                if (EH == (*t)->bf) {
+                    *isShorter = 1;
+                }
+                else {
+                    *isShorter = 0;
+                }
+                break;
+
             case EH:
                 (*t)->bf = LH;
                 *isShorter = 0;
                 break;
+
             case RH:
                 (*t)->bf = EH;
                 *isShorter = 1;
                 break;
+
             default:
                 break;
             }
@@ -227,14 +257,16 @@ void deleteAVLTree(AVLTree *t, int data, int *isShorter) {
                 (*t)->bf = EH;
                 *isShorter = 1;
                 break;
+
             case EH:
                 (*t)->bf = RH;
                 *isShorter = 0;
                 break;
+
             case RH:
                 balanceRight(t);
 
-                if (EH == (*t)/*->left*/->bf) {
+                if (EH == (*t)->bf) {
                     // 平衡后高度-1
                     *isShorter = 1;
                 }
@@ -243,6 +275,7 @@ void deleteAVLTree(AVLTree *t, int data, int *isShorter) {
                     *isShorter = 0;
                 }
                 break;
+
             default:
                 break;
             }
@@ -258,7 +291,7 @@ void deleteAVLTree(AVLTree *t, int data, int *isShorter) {
 
                 balanceLeft(t);
 
-                if (EH == (*t)/*->right*/->bf) {
+                if (EH == (*t)->bf) {
                     *isShorter = 1;
                 }
                 else {
@@ -266,14 +299,17 @@ void deleteAVLTree(AVLTree *t, int data, int *isShorter) {
                     *isShorter = 0;
                 }
                 break;
+
             case EH:
                 (*t)->bf = LH;
                 *isShorter = 0;
                 break;
+
             case RH:
                 (*t)->bf = EH;
                 *isShorter = 1;
                 break;
+
             default:
                 break;
             }
@@ -306,20 +342,34 @@ void deleteAVLTree(AVLTree *t, int data, int *isShorter) {
             (*t)->data = pre->data;
             free(pre);
 
-            switch ((*t)->bf)
-            {
-            case RH:
-                balanceRight(t);
-
-                if (EH == (*t)->bf) {
-                    // 平衡后高度-1
+            if (*isShorter) {
+                switch ((*t)->bf)
+                {
+                case LH:
+                    (*t)->bf = EH;
                     *isShorter = 1;
-                }
-                else {
+                    break;
+
+                case EH:
+                    (*t)->bf = RH;
                     *isShorter = 0;
+                    break;
+
+                case RH:
+                    balanceRight(t);
+
+                    if (EH == (*t)->bf) {
+                        // 平衡后高度-1
+                        *isShorter = 1;
+                    }
+                    else {
+                        *isShorter = 0;
+                    }
+                    break;
+
+                default:
+                    break;
                 }
-            default:
-                break;
             }
         }
     }
@@ -335,19 +385,33 @@ void traversal(AVLTree t) {
 }
 
 int main() {
+#if 0
     int a[] = { 13,42,61,75,15,6,58,160,19,7 };
+    int b[] = { 58,61,75,13,6,160,19,42,7,15 };
+#elif 0
+    int a[] = { 50,11,32,72,99,41,65,29,20,91 };
+    int b[] = { 29,11,99,91,32,41,50,65,20,72 };
+#elif 0
+    int a[] = { 77, 66, 55, 33, 99, 22, 11, 44, 88, 100 };
+    int b[] = { 44,77, 66, 55, 99, 22, 11, 88, 100, 33};
+#else
+    int a[] = { 42, 61, 96, 43, 36, 31, 45, 87, 6, 41,
+        92, 64, 69, 16, 80, 13, 67, 58, 95, 88 };
+    int b[] = { 42, 80, 61, 95, 43, 58, 36, 31, 87, 96,
+        41, 64, 92, 69, 16, 13, 6, 67, 45, 88 };
+#endif
+
     int isTaller = 0;
     AVLTree t = NULL;
     for (int i = 0; i < NodeNum; ++i) {
         insertAVLTree(&t, a[i], &isTaller);
         //traversal(t);
+        //printf("\n");
     }
     traversal(t);
     printf("\n");
     
     int isShorter = 0;
-
-    int b[] = { 58,61,75,13,6,160,19,42,7,15 };
     for (int i = 0; i < NodeNum; ++i) {
         printf("delete %d:\n", b[i]);
         deleteAVLTree(&t, b[i], &isShorter);
