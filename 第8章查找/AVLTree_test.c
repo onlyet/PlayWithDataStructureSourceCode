@@ -9,19 +9,20 @@
 
 typedef struct AVLNode {
     int data;
-    int bf;
-    struct AVLNode *left;
-    struct AVLNode *right;
+    int bf;                 // 平衡因子
+    struct AVLNode *left;   // 左孩子
+    struct AVLNode *right;  // 右孩子
 }AVLNode, *AVLTree;
 
 // 旋转以t为根节点的二叉树，最后t指向新的根节点
+// 左旋
 void rotateLeft(AVLTree *t) {
     AVLTree r = (*t)->right;
     (*t)->right = r->left;
     r->left = (*t);
     (*t) = r;
 }
-
+// 右旋
 void rotateRight(AVLTree *t) {
     AVLTree l = (*t)->left;
     (*t)->left = l->right;
@@ -29,6 +30,7 @@ void rotateRight(AVLTree *t) {
     (*t) = l;
 }
 
+// 平衡左子树
 void balanceLeft(AVLTree *t) {
     AVLTree l = (*t)->left;
     AVLTree lr;
@@ -80,6 +82,7 @@ void balanceLeft(AVLTree *t) {
     }
 }
 
+// 平衡右子树
 void balanceRight(AVLTree *t) {
     AVLTree r = (*t)->right;
     AVLTree rl;
@@ -394,11 +397,16 @@ int main() {
 #elif 0
     int a[] = { 77, 66, 55, 33, 99, 22, 11, 44, 88, 100 };
     int b[] = { 44,77, 66, 55, 99, 22, 11, 88, 100, 33};
-#else
+#elif 0
     int a[] = { 42, 61, 96, 43, 36, 31, 45, 87, 6, 41,
         92, 64, 69, 16, 80, 13, 67, 58, 95, 88 };
     int b[] = { 42, 80, 61, 95, 43, 58, 36, 31, 87, 96,
         41, 64, 92, 69, 16, 13, 6, 67, 45, 88 };
+#else
+    int a[] = {63, 7, 56, 22, 11, 29, 2, 28, 32, 4,
+        14, 0, 24, 68, 59, 70, 30, 18, 71, 83 };
+    int b[] = { 14, 63, 7, 71, 30, 83, 56, 22,  29, 2, 
+        59, 32, 4, 0, 24, 28, 68,  70,  11, 18,};
 #endif
 
     int isTaller = 0;
