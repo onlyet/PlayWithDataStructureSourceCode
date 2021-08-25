@@ -210,11 +210,9 @@ void updateBf(AVLTree *t, int *isShorter, AVLTree *pre) {
     if (NULL != (*t)->right) {
         updateBf(&(*t)->right, isShorter, pre);
 
-        int bug = 1;
         if (*isShorter) {
             switch ((*t)->bf) {
             case LH:
-                bug = 1;
                 balanceLeft(t);
                 if (EH == (*t)->bf) {
                     *isShorter = 1;
@@ -397,7 +395,7 @@ int main() {
 #elif 0
     int a[] = { 77, 66, 55, 33, 99, 22, 11, 44, 88, 100 };
     int b[] = { 44,77, 66, 55, 99, 22, 11, 88, 100, 33};
-#elif 0
+#elif 1
     int a[] = { 42, 61, 96, 43, 36, 31, 45, 87, 6, 41,
         92, 64, 69, 16, 80, 13, 67, 58, 95, 88 };
     int b[] = { 42, 80, 61, 95, 43, 58, 36, 31, 87, 96,
