@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
-#define NodeNum 20
+#define NodeNum 10
 
 #define RH -1
 #define EH 0
@@ -386,7 +386,7 @@ void traversal(AVLTree t) {
 }
 
 int main() {
-#if 0
+#if 1
     int a[] = { 13,42,61,75,15,6,58,160,19,7 };
     int b[] = { 58,61,75,13,6,160,19,42,7,15 };
 #elif 0
@@ -395,7 +395,7 @@ int main() {
 #elif 0
     int a[] = { 77, 66, 55, 33, 99, 22, 11, 44, 88, 100 };
     int b[] = { 44,77, 66, 55, 99, 22, 11, 88, 100, 33};
-#elif 1
+#elif 0
     int a[] = { 42, 61, 96, 43, 36, 31, 45, 87, 6, 41,
         92, 64, 69, 16, 80, 13, 67, 58, 95, 88 };
     int b[] = { 42, 80, 61, 95, 43, 58, 36, 31, 87, 96,
